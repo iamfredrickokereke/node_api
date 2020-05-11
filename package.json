@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/iamfredrickokereke/node_api/issues"
   },
-  "homepage": "https://github.com/iamfredrickokereke/node_api#readme"
+  "homepage": "https://github.com/iamfredrickokereke/node_api#readme",
+  "dependencies": {
+    "restify": "^8.5.1"
+  }
 }
