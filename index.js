@@ -1,6 +1,16 @@
+// create standardized response
+
+function respond(res, next, status, data, http_code) {
+    var response = {
+        'status' : status,
+        'data' : data
+    }
+    res.writeHead(http_code, 'content-type', 'application/json');
+    res.end(JSON.stringify(response));
+
+}
+
 var restify = require('restify');
-
-
 
 var server = restify.createServer();
 
@@ -71,7 +81,7 @@ server.del('/user/:id', (req, res, next) =>{
     delete users[parseInt(req.params.id)];
     res.setHeader('content-type', 'application/json');
 	res.writeHead(200);
-	res.end(JSON.stringify(user));
+	res.end(JSON.stringify(true));
 	return next();
 })
 
