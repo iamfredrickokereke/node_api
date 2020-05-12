@@ -3,9 +3,13 @@ var restify = require('restify');
 
 var server = restify.createServer();
 
-require('./controllers/setupController')
+var setupController = require('./controllers/setupController');
 
-require('./controllers/userController')
+var userController = require('./controllers/userController');
+
+setupController(server, restify);
+
+userController(server);
 
 
 server.listen(8080, function() {

@@ -1,13 +1,11 @@
 var helper = require('../config/helperFunction')
-
-module.exports = (server) =>{
-    
-    // retrieve default route path
-
    
 var users = {};
 var max_user_id = 0;
  
+module.exports = (server) =>{
+    
+    // retrieve default route path
 
     server.get('/', (req, res, next) =>{
          helper.success(res, next, users)
