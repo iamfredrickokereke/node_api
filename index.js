@@ -47,9 +47,32 @@ server.post('/user', (req, res, next) =>{
 	res.writeHead(200);
 	res.end(JSON.stringify(user));
 	return next();
+})
 
 
-    
+server.put('/user/:id', (req, res, next) =>{
+
+    var user = users[parseInt(req.params.id)];
+
+    var updates = req.params;
+
+    for (const field in updates) {
+        
+             user[field] = updates[field];
+    }
+	
+	res.setHeader('content-type', 'application/json');
+	res.writeHead(200);
+	res.end(JSON.stringify(user));
+	return next();
+})
+
+server.del('/user/:id', (req, res, next) =>{
+    delete users[parseInt(req.params.id)];
+    res.setHeader('content-type', 'application/json');
+	res.writeHead(200);
+	res.end(JSON.stringify(user));
+	return next();
 })
 
 
