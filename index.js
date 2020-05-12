@@ -22,6 +22,14 @@ server.get('/', (req, res, next) =>{
     return next()
 })
 
+server.get('/user/:id', (req, res, next) =>{
+    res.writeHead(200, {'Content-Type' : 'Application/json'});
+    res.end(JSON.stringify(users[parseInt(req.params.id)]));
+
+    return next()
+})
+
+
 
 //create new users under the user route with new id
 
@@ -29,8 +37,12 @@ server.post('/user', (req, res, next) =>{
 
     var user = req.params;
 	max_user_id++;
-	user.id = max_user_id;
+    user.id = max_user_id;
+    user.name = req.params.name;
+    user.email = req.params.email;
 	users[user.id] = user;
+	users[user.name] = user;
+	users[user.email] = user;
 	res.setHeader('content-type', 'application/json');
 	res.writeHead(200);
 	res.end(JSON.stringify(user));
