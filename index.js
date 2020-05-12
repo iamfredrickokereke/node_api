@@ -86,11 +86,13 @@ server.put('/user/:id', (req, res, next) =>{
 })
 
 server.del('/user/:id', (req, res, next) =>{
-    delete users[parseInt(req.params.id)];
     if (typeof(users[req.params.id]) == 'undefined') {
         failure(res, next, 'Ouch, we don\'t know recognice you', 404)
-    }{
-    success(res, next, { status: 'deleted successfully', 'content' : []})}
+    }
+
+    delete users[parseInt(req.params.id)];
+    
+    success(res, next, { status: 'user deleted successfully', 'content' : []})
 })
 
 
