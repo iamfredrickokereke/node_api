@@ -1,7 +1,13 @@
 var restify = require('restify');
 
 
+
 var server = restify.createServer();
+
+server.use(restify.plugins.acceptParser(server.acceptable));
+
+server.use(restify.plugins.bodyParser());
+
 
 var users = {};
 var max_user_id = 0;
@@ -17,17 +23,16 @@ server.post('/user', (req, res, next) =>{
 
     var user = req.params;
     max_user_id++;
-
     user.id = max_user_id;
-
     users[user.id] = user;
     // console.log(typeof(user));
-    
-
-    res.writeHead(200, {'Content-Type' : 'Application/json'});
+    res.setHeader('content-type', 'application/json');
+	res.writeHead(200);
     res.end(JSON.stringify(user));
-
     return next()
+
+
+    
 })
 
 
