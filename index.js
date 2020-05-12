@@ -7,7 +7,16 @@ function respond(res, next, status, data, http_code) {
     }
     res.writeHead(http_code, 'content-type', 'application/json');
     res.end(JSON.stringify(response));
+    return next()
 
+}
+
+function success(res, next, data) {
+    respond(res, next, 'success', data, 200)
+}
+function failure(res, next, data, http_code) {
+    respond(res, next, 'oops, an error occured', data, http_code)
+    
 }
 
 var restify = require('restify');
@@ -26,17 +35,12 @@ var max_user_id = 0;
 // retrieve default route path
 
 server.get('/', (req, res, next) =>{
-    res.writeHead(200, {'Content-Type' : 'Application/json'});
-    res.end(JSON.stringify(users));
-
-    return next()
+    
+    success(res, next, users)
 })
 
 server.get('/user/:id', (req, res, next) =>{
-    res.writeHead(200, {'Content-Type' : 'Application/json'});
-    res.end(JSON.stringify(users[parseInt(req.params.id)]));
-
-    return next()
+    success(res,next, users[parseInt(req.params.id)])
 })
 
 
@@ -53,10 +57,7 @@ server.post('/user', (req, res, next) =>{
 	users[user.id] = user;
 	users[user.name] = user;
 	users[user.email] = user;
-	res.setHeader('content-type', 'application/json');
-	res.writeHead(200);
-	res.end(JSON.stringify(user));
-	return next();
+	success(res, next, user)
 })
 
 
@@ -71,18 +72,12 @@ server.put('/user/:id', (req, res, next) =>{
              user[field] = updates[field];
     }
 	
-	res.setHeader('content-type', 'application/json');
-	res.writeHead(200);
-	res.end(JSON.stringify(user));
-	return next();
+	success(res, next, user)
 })
 
 server.del('/user/:id', (req, res, next) =>{
     delete users[parseInt(req.params.id)];
-    res.setHeader('content-type', 'application/json');
-	res.writeHead(200);
-	res.end(JSON.stringify(true));
-	return next();
+    success(res, next, { status: 'deleted successfully', 'content' : []})
 })
 
 
