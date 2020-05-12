@@ -60,6 +60,13 @@ module.exports = (server) =>{
 
 
     server.put('/user/:id', (req, res, next) =>{
+
+        req.assert('id', 'id is required and must be numeric').notEmpty().isInt();
+        
+        var errors = req.validationErrors();
+        if (errors) {
+            helper.failure(res, next, errors, 400);
+        }
         
         if (typeof(users[req.params.id]) == 'undefined') {
             helper.failure(res, next, 'Ouch, we don\'t know recognice you', 404)
@@ -77,6 +84,14 @@ module.exports = (server) =>{
     })
 
     server.del('/user/:id', (req, res, next) =>{
+
+        req.assert('id', 'id is required and must be numeric').notEmpty().isInt();
+        
+        var errors = req.validationErrors();
+        if (errors) {
+            helper.failure(res, next, errors, 400);
+        }
+        
         if (typeof(users[req.params.id]) == 'undefined') {
             helper.failure(res, next, 'Ouch, we don\'t know recognice you', 404)
         }
