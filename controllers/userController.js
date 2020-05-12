@@ -15,16 +15,16 @@ module.exports = (server) =>{
 
         req.assert('id', 'id is required and must be numeric').notEmpty().isInt();
 
-        var error = req.validationErrors();
+        var errors = req.validationErrors();
          
-        if (error) {
-            helper.failure(res, next, error[0], 404)
-        }
-
         if (typeof(users[req.params.id]) == 'undefined') {
-            failure(res, next, 'we don\'t recognise this user', 404)
+            helper.failure(res, next, 'we don\'t recognise this user', 404);
+
+            if (errors) {
+                helper.failure(res, next, errors[0], 400);
+            }
         }{
-            success(res,next, users[parseInt(req.params.id)])
+            helper.success(res, next, users[parseInt(req.params.id)])
         }
     })
 
@@ -33,15 +33,28 @@ module.exports = (server) =>{
     //create new users under the user route with new id
 
     server.post('/user', (req, res, next) =>{
+        req.assert('firstname', 'Firstname is required.').notEmpty();
+        req.assert('lastname', 'Lastname is required.').notEmpty();
+        req.assert('email', 'Email is required and must be valid').notEmpty().isEmail();
+        req.assert('career', 'Career must either be student, teacher, or professor.').notEmpty();
         
+        var errors = req.validationErrors();
+        if (errors) {
+            helper.failure(res, next, errors, 400);
+        }
+
         var user = req.params;
         max_user_id++;
         user.id = max_user_id;
-        user.name = req.params.name;
+        user.fname = req.params.firstname;
+        user.lname = req.params.lastname;
         user.email = req.params.email;
+        user.career = req.params.career;
         users[user.id] = user;
-        users[user.name] = user;
+        users[user.fname] = user;
+        users[user.lname] = user;
         users[user.email] = user;
+        users[user.career] = user;
         helper.success(res, next, user)
     })
 
