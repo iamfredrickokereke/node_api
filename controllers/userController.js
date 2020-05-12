@@ -4,9 +4,13 @@ module.exports = (server) =>{
     
     // retrieve default route path
 
+   
+var users = {};
+var max_user_id = 0;
+ 
+
     server.get('/', (req, res, next) =>{
-        
-        success(res, next, users)
+         helper.success(res, next, users)
     })
 
     server.get('/user/:id', (req, res, next) =>{
@@ -32,14 +36,14 @@ module.exports = (server) =>{
         users[user.id] = user;
         users[user.name] = user;
         users[user.email] = user;
-        success(res, next, user)
+        helper.success(res, next, user)
     })
 
 
     server.put('/user/:id', (req, res, next) =>{
         
         if (typeof(users[req.params.id]) == 'undefined') {
-            failure(res, next, 'Ouch, we don\'t know recognice you', 404)
+            helper.failure(res, next, 'Ouch, we don\'t know recognice you', 404)
         }
         var user = users[parseInt(req.params.id)];
         
@@ -50,17 +54,17 @@ module.exports = (server) =>{
             user[field] = updates[field];
         }
         
-        success(res, next, user)
+        helper.success(res, next, user)
     })
 
     server.del('/user/:id', (req, res, next) =>{
         if (typeof(users[req.params.id]) == 'undefined') {
-            failure(res, next, 'Ouch, we don\'t know recognice you', 404)
+            helper.failure(res, next, 'Ouch, we don\'t know recognice you', 404)
         }
 
         delete users[parseInt(req.params.id)];
         
-        success(res, next, { status: 'user deleted successfully', 'content' : []})
+        helper.success(res, next, { status: 'user deleted successfully', 'content' : []})
     })
 
 
