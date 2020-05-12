@@ -7,7 +7,9 @@ var setupController = require('./controllers/setupController');
 
 var userController = require('./controllers/userController');
 
-setupController(server, restify);
+var restifyValidator = require('restify-validator');
+
+setupController(server, restify, restifyValidator);
 
 userController(server);
 

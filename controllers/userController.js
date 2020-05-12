@@ -8,10 +8,18 @@ module.exports = (server) =>{
     // retrieve default route path
 
     server.get('/', (req, res, next) =>{
-         helper.success(res, next, users)
+       helper.success(res, next, users)
     })
 
     server.get('/user/:id', (req, res, next) =>{
+
+        req.assert('id', 'id is required and must be numeric').notEmpty().isInt();
+
+        var error = req.validationErrors();
+         
+        if (error) {
+            helper.failure(res, next, error[0], 404)
+        }
 
         if (typeof(users[req.params.id]) == 'undefined') {
             failure(res, next, 'we don\'t recognise this user', 404)
