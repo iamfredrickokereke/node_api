@@ -5,7 +5,7 @@ var server = restify.createServer();
 
 var mongoose = require('mongoose');
 
-
+mongoose.connect(config.getMongoConnection())
 
 var setupController = require('./controllers/setupController');
 
