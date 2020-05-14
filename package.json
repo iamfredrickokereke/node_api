@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/iamfredrickokereke/node_api#readme",
   "dependencies": {
+    "mongoose": "^5.9.14",
     "restify": "^8.5.1",
     "restify-validator": "^0.3.1"
   }

@@ -3,11 +3,16 @@ var restify = require('restify');
 
 var server = restify.createServer();
 
+var mongoose = require('mongoose');
+
+
+
 var setupController = require('./controllers/setupController');
 
 var userController = require('./controllers/userController');
 
 var restifyValidator = require('restify-validator');
+
 
 setupController(server, restify, restifyValidator);
 
