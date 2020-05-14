@@ -3,9 +3,11 @@ var restify = require('restify');
 
 var server = restify.createServer();
 
+var config = require('./config/dbConnection')
+
 var mongoose = require('mongoose');
 
-mongoose.connect(config.getMongoConnection())
+mongoose.connect(config.getMongoConnection(), { useUnifiedTopology: true,  useNewUrlParser: true} )
 
 var setupController = require('./controllers/setupController');
 
