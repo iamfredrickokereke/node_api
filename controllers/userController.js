@@ -33,7 +33,7 @@ module.exports = (server) => {
             if (user === null) {
                 helper.failure(res, next, 'The specified user could not be found', 400);
             }              
-            helper.success(res, next, users[parseInt(req.params.id)])
+            helper.success(res, next, user);
         })
     })
 
@@ -98,7 +98,7 @@ module.exports = (server) => {
                     helper.success(res, next, user);
                 }
             })            
-            helper.success(res, next, users[parseInt(req.params.id)])
+            helper.success(res, next, user)
         })
         
     })
