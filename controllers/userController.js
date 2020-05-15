@@ -112,11 +112,7 @@ module.exports = (server) => {
             helper.failure(res, next, errors, 400);
         }
         
-        if (typeof(users[req.params.id]) == 'undefined') {
-            helper.failure(res, next, 'Ouch, we don\'t know recognice you', 404)
-        }
-
-        delete users[parseInt(req.params.id)];
+        
         
         helper.success(res, next, { status: 'user deleted successfully', 'content' : []});
     })
