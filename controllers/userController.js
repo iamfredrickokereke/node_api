@@ -9,7 +9,15 @@ module.exports = (server) =>{
     // retrieve default route path
 
     server.get('/', (req, res, next) =>{
-       helper.success(res, next, users)
+        Model.find({}, function (err, docs) {
+            // docs is an array
+            if (err) {
+                helper.failure(res, next, errors, 400);
+
+            } else {
+                helper.success(res, next, docs)
+            }
+          });
     })
 
     server.get('/user/:id', (req, res, next) =>{
@@ -46,8 +54,6 @@ module.exports = (server) =>{
 
         var user = UserModel();
 
-        max_user_id++;
-        user.id = max_user_id;
         user.firstname = req.params.firstname;
         user.lastname = req.params.lastname;
         user.email = req.params.email;
