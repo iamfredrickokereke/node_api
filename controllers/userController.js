@@ -1,40 +1,40 @@
 var helper = require('../config/helperFunction');
-var UserModel = require('../models/userModel')
+var UserModel = require('../models/userModel');
    
-var users = {};
-var max_user_id = 0;
- 
-module.exports = (server) =>{
+
+module.exports = (server) => {
     
     // retrieve default route path
 
     server.get('/', (req, res, next) =>{
-        Model.find({}, function (err, docs) {
+        UserModel.find({}, (err, docs) => {
             // docs is an array
             if (err) {
                 helper.failure(res, next, errors, 400);
-
             } else {
-                helper.success(res, next, docs)
+                helper.success(res, next, docs);
             }
-          });
+        });
     })
 
     server.get('/user/:id', (req, res, next) =>{
 
-        req.assert('id', 'id is required and must be numeric').notEmpty().isInt();
+        req.assert('id', 'id is required and must be numeric').notEmpty();
 
         var errors = req.validationErrors();
          
-        if (typeof(users[req.params.id]) == 'undefined') {
-            helper.failure(res, next, 'we don\'t recognise this user', 404);
-
-            if (errors) {
+        if (errors) {
                 helper.failure(res, next, errors[0], 400);
             }
-        }{
+        UserModel.findOne({_id : req.params.id}, (err, user) => {
+            if (err) {
+                helper.failure(res, next, 'Oops, Something went wrong while fetching user data', 500);
+            }
+            if (user === null) {
+                helper.failure(res, next, 'The specified user could not be found', 400);
+            }              
             helper.success(res, next, users[parseInt(req.params.id)])
-        }
+        })
     })
 
 
@@ -64,15 +64,8 @@ module.exports = (server) =>{
                 helper.failure(res, next, errors, 500);
             } else {
                 helper.success(res, next, user);
-
             }
         })
-        
-        // users[user.id] = user;
-        // users[user.fname] = user;
-        // users[user.lname] = user;
-        // users[user.email] = user;
-        // users[user.career] = user;
         helper.success(res, next, user)
     })
 
@@ -116,8 +109,8 @@ module.exports = (server) =>{
 
         delete users[parseInt(req.params.id)];
         
-        helper.success(res, next, { status: 'user deleted successfully', 'content' : []})
+        helper.success(res, next, { status: 'user deleted successfully', 'content' : []});
     })
+    }    
 
 
-}
