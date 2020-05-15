@@ -72,26 +72,35 @@ module.exports = (server) => {
 
     server.put('/user/:id', (req, res, next) =>{
 
-        req.assert('id', 'id is required and must be numeric').notEmpty().isInt();
+        req.assert('id', 'id is required and must be numeric').notEmpty();
         
         var errors = req.validationErrors();
         if (errors) {
             helper.failure(res, next, errors, 400);
         }
+        UserModel.findOne({_id : req.params.id}, (err, user) => {
+            if (err) {
+                helper.failure(res, next, 'Oops, Something went wrong while fetching user data', 500);
+            }
+            if (user === null) {
+                helper.failure(res, next, 'The specified user could not be found', 400);
+            } 
+            var updates = req.params;
+            delete updates.id;
+            for (const field in updates) {
+                
+                user[field] = updates[field];
+            } 
+            user.save(function (error) {
+                if (error) {
+                    helper.failure(res, next, errors, 500);
+                } else {
+                    helper.success(res, next, user);
+                }
+            })            
+            helper.success(res, next, users[parseInt(req.params.id)])
+        })
         
-        if (typeof(users[req.params.id]) == 'undefined') {
-            helper.failure(res, next, 'Ouch, we don\'t know recognice you', 404)
-        }
-        var user = users[parseInt(req.params.id)];
-        
-        var updates = req.params;
-        
-        for (const field in updates) {
-            
-            user[field] = updates[field];
-        }
-        
-        helper.success(res, next, user)
     })
 
     server.del('/user/:id', (req, res, next) =>{
