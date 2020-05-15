@@ -44,18 +44,29 @@ module.exports = (server) =>{
             helper.failure(res, next, errors, 400);
         }
 
-        var user = req.params;
+        var user = UserModel();
+
         max_user_id++;
         user.id = max_user_id;
-        user.fname = req.params.firstname;
-        user.lname = req.params.lastname;
+        user.firstname = req.params.firstname;
+        user.lastname = req.params.lastname;
         user.email = req.params.email;
         user.career = req.params.career;
-        users[user.id] = user;
-        users[user.fname] = user;
-        users[user.lname] = user;
-        users[user.email] = user;
-        users[user.career] = user;
+
+        user.save(function (error) {
+            if (error) {
+                helper.failure(res, next, errors, 500);
+            } else {
+                helper.success(res, next, user);
+
+            }
+        })
+        
+        // users[user.id] = user;
+        // users[user.fname] = user;
+        // users[user.lname] = user;
+        // users[user.email] = user;
+        // users[user.career] = user;
         helper.success(res, next, user)
     })
 
