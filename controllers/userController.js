@@ -112,7 +112,28 @@ module.exports = (server) => {
             helper.failure(res, next, errors, 400);
         }
         
-        
+        UserModel.findOne({_id : req.params.id}, (err, user) => {
+            if (err) {
+                helper.failure(res, next, 'Oops, Something went wrong while fetching user data', 500);
+            }
+            if (user === null) {
+                helper.failure(res, next, 'The specified user could not be found', 400);
+            } 
+            var updates = req.params;
+            delete updates.id;
+            for (const field in updates) {
+                
+                user[field] = updates[field];
+            } 
+            user.save(function (error) {
+                if (error) {
+                    helper.failure(res, next, errors, 500);
+                } else {
+                    helper.success(res, next, user);
+                }
+            })            
+            helper.success(res, next, user)
+        })
         
         helper.success(res, next, { status: 'user deleted successfully', 'content' : []});
     })
