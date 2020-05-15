@@ -10,3 +10,8 @@ var UserShema = new Schema({
     email : String,
     career : String
 })
+
+
+var UserModel = mongoose.model('users', UserShema)
+
+module.exports = use

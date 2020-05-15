@@ -1,4 +1,5 @@
-var helper = require('../config/helperFunction')
+var helper = require('../config/helperFunction');
+var UserModel = require('../models/userModel')
    
 var users = {};
 var max_user_id = 0;
