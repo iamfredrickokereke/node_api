@@ -119,13 +119,8 @@ module.exports = (server) => {
             if (user === null) {
                 helper.failure(res, next, 'The specified user could not be found', 400);
             } 
-            var updates = req.params;
-            delete updates.id;
-            for (const field in updates) {
-                
-                user[field] = updates[field];
-            } 
-            user.save(function (error) {
+            
+            user.remove(function (error) {
                 if (error) {
                     helper.failure(res, next, errors, 500);
                 } else {
